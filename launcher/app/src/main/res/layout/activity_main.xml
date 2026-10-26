@@ -19,6 +19,7 @@
          description wraps in a column instead of running the width of the screen. -->
     <LinearLayout
         android:id="@+id/heroShelf"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="55dp"
@@ -108,7 +109,8 @@
             android:shadowColor="#99000000"
             android:shadowDx="0"
             android:shadowDy="1"
-            android:shadowRadius="4" />
+            android:shadowRadius="4" 
+            android:visibility="gone" />
 
         <!-- Ayat of the day: Arabic text -->
         <TextView
@@ -124,7 +126,8 @@
             android:shadowColor="#B3000000"
             android:shadowDx="0"
             android:shadowDy="1"
-            android:shadowRadius="5" />
+            android:shadowRadius="5" 
+            android:visibility="gone" />
 
         <!-- Ayat of the day: Translation -->
         <TextView
@@ -144,7 +147,8 @@
             android:shadowDy="1"
             android:shadowRadius="4"
             android:maxLines="2"
-            android:ellipsize="end" />
+            android:ellipsize="end" 
+            android:visibility="gone" />
 
         <!-- Waktu Solat Header (e.g. WAKTU SOLAT • 11 JAMADILAWAL 1448H) -->
         <TextView
@@ -162,10 +166,24 @@
             android:shadowDx="0"
             android:shadowDy="1"
             android:shadowRadius="4" />
+        <TextView
+            android:id="@+id/nextPrayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="#FFFFFFFF"
+            android:fontFamily="@font/outfit"
+            android:fontVariationSettings="'wght' 600"
+            android:includeFontPadding="false"
+            android:shadowColor="#B3000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="4" />
 
         <!-- Waktu Solat Table (6 Columns: Subuh, Syuruk, Zohor, Asar, Maghrib, Isyak) -->
         <LinearLayout
             android:id="@+id/prayerTable"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -370,6 +388,42 @@
                     android:shadowRadius="4" />
             </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:id="@+id/eplHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="CHELSEA  &#8226;  SETERUSNYA"
+            android:textColor="#B3FFFFFF"
+            android:textSize="12sp"
+            android:fontFamily="@font/outfit"
+            android:fontVariationSettings="'wght' 600"
+            android:letterSpacing="0.14"
+            android:includeFontPadding="false"
+            android:shadowColor="#99000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="4"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/eplFixtures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#FFFFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="@font/outfit"
+            android:fontVariationSettings="'wght' 500"
+            android:gravity="end"
+            android:lineSpacingExtra="3dp"
+            android:maxLines="4"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:shadowColor="#B3000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="4"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
@@ -407,7 +461,7 @@
                     android:format12Hour="h:mm"
                     android:format24Hour="HH:mm"
                     android:textColor="#FFFFFFFF"
-                    android:textSize="56sp"
+                    android:textSize="40sp"
                     android:fontFamily="@font/outfit"
                     android:fontVariationSettings="'wght' 500"
                     android:letterSpacing="-0.03"
@@ -432,7 +486,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:textColor="#FFFFFFFF"
-                        android:textSize="13sp"
+                        android:textSize="11sp"
                         android:fontFamily="@font/outfit"
                         android:fontVariationSettings="'wght' 600"
                         android:letterSpacing="0.06"
@@ -450,7 +504,7 @@
                         android:layout_marginTop="3dp"
                         android:includeFontPadding="false"
                         android:textColor="#E6FFFFFF"
-                        android:textSize="13sp"
+                        android:textSize="11sp"
                         android:fontFamily="@font/outfit"
                         android:fontVariationSettings="'wght' 600"
                         android:letterSpacing="0.06"
@@ -495,7 +549,7 @@
                 android:paddingBottom="5dp"
                 android:includeFontPadding="false"
                 android:textColor="#FFFFFFFF"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:fontFamily="@font/outfit"
                 android:fontVariationSettings="'wght' 500"
                 android:shadowColor="#99000000"
@@ -519,7 +573,9 @@
                     android:id="@+id/btnInputs"
                     style="@style/TopMenuButton"
                     android:text="@string/inputs"
-                    android:drawableStart="@drawable/ic_input" />
+                    android:drawableStart="@drawable/ic_input" 
+            android:layout_height="34dp" 
+            android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/btnWifi"
@@ -528,17 +584,21 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:text="@string/wifi"
-                    android:drawableStart="@drawable/ic_wifi" />
+                    android:drawableStart="@drawable/ic_wifi" 
+            android:layout_height="34dp" 
+            android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/btnSettings"
                     style="@style/TopMenuButton"
-                    android:layout_width="42dp"
+                    android:layout_width="34dp"
                     android:paddingStart="10dp"
                     android:paddingEnd="0dp"
                     android:drawablePadding="0dp"
                     android:contentDescription="@string/settings"
-                    android:drawableStart="@drawable/ic_settings" />
+                    android:drawableStart="@drawable/ic_settings" 
+            android:layout_height="34dp" 
+            android:textSize="12sp" />
             </LinearLayout>
 
             <!-- Fallback Prayer Times view -->
@@ -554,6 +614,7 @@
         <!-- The wrapper clips at the grid's edge; the grid itself must not clip so scaled tiles can overflow their cells. -->
         <com.gathin.tvhome.FadeTopFrame
             android:id="@+id/gridWrap"
+            android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

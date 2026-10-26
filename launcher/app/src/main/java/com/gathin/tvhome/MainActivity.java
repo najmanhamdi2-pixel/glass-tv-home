@@ -148,6 +148,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private TextView weatherAirQualityView;
     private View islamicShelf;
     private TextView ayatRef, ayatArabic, ayatTranslation, prayerHeader;
+    private TextView eplHeader, eplFixtures, nextPrayerView;
     private TextView lblSubuh, lblSyuruk, lblZohor, lblAsar, lblMaghrib, lblIsyak;
     private TextView timeSubuh, timeSyuruk, timeZohor, timeAsar, timeMaghrib, timeIsyak;
     private boolean shamsi;
@@ -401,6 +402,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             ayatArabic = findViewById(R.id.ayatArabic);
             ayatTranslation = findViewById(R.id.ayatTranslation);
             prayerHeader = findViewById(R.id.prayerHeader);
+            eplHeader = findViewById(R.id.eplHeader);
+            eplFixtures = findViewById(R.id.eplFixtures);
+            nextPrayerView = findViewById(R.id.nextPrayer);
 
             lblSubuh = findViewById(R.id.lblSubuh);
             lblSyuruk = findViewById(R.id.lblSyuruk);
@@ -460,6 +464,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
         updatePrayerTimes();
         PrayerTimes.syncIfDue(this, this::updatePrayerTimes);
+        PremierLeague.syncIfDue(this, this::updateEplShelf);
         vpnApp = cfg.vpnApp;
         moduleCards = cfg.moduleCards;
         hiddenApps = new HashSet<>(cfg.hiddenApps);
@@ -902,6 +907,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         updateWifiLabel();
         updateWeatherAqi();
         WeatherAirQuality.syncIfDue(this, this::updateWeatherAqi);
+        PremierLeague.syncIfDue(this, this::updateEplShelf);
         updateIslamicShelf();
         updateInputsButton();
         startWallpaperRotation();
@@ -1491,7 +1497,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         int inner = grid.getWidth() - grid.getPaddingLeft() - grid.getPaddingRight();
         int itemH = AppAdapter.itemHeightPx(AppAdapter.tileHeightPx(AppAdapter.tileWidthPx(inner, COLUMNS, density)), density);
         int dockRow = itemH + (int) ((6 + 12) * density);   // item height plus DockDecoration offsets
-        int want = Math.max(0, h - dockRow - itemH * rowsBelowDockSetting - (int) (30 * density));
+        int want = Math.max(0, h - dockRow - itemH * rowsBelowDockSetting);
         if (grid.getPaddingTop() == want) return true;
         grid.setPadding(grid.getPaddingLeft(), want, grid.getPaddingRight(), grid.getPaddingBottom());
         return false;
@@ -1960,15 +1966,44 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
     }
 
+    private void updateEplShelf() {
+        if (eplHeader == null || eplFixtures == null) return;
+        String lines = PremierLeague.getLines(this);
+        boolean show = !lines.isEmpty();
+        if (show) eplFixtures.setText(lines);
+        int vis = show ? View.VISIBLE : View.GONE;
+        eplHeader.setVisibility(vis);
+        eplFixtures.setVisibility(vis);
+    }
+
     private void updateIslamicShelf() {
         if (islamicShelf == null) return;
+        updateEplShelf();
+        if (nextPrayerView != null) {
+            PrayerTimes.PrayerItem[] pi = PrayerTimes.getPrayerItems(this);
+            if (pi != null) {
+                for (PrayerTimes.PrayerItem it : pi) {
+                    if (!it.isNext) continue;
+                    android.text.SpannableStringBuilder sb = new android.text.SpannableStringBuilder();
+                    sb.append(it.name).append("  ");
+                    sb.setSpan(new android.text.style.ForegroundColorSpan(0xFF4ADE80), 0, sb.length(), 0);
+                    sb.setSpan(new android.text.style.AbsoluteSizeSpan(17, true), 0, sb.length(), 0);
+                    int start = sb.length();
+                    sb.append(it.timeStr);
+                    sb.setSpan(new android.text.style.AbsoluteSizeSpan(26, true), start, sb.length(), 0);
+                    sb.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, sb.length(), 0);
+                    nextPrayerView.setText(sb);
+                    break;
+                }
+            }
+        }
         DailyAyat.Ayat ayat = DailyAyat.getToday();
         if (ayatRef != null) ayatRef.setText(ayat.reference);
         if (ayatArabic != null) ayatArabic.setText(ayat.arabic);
         if (ayatTranslation != null) ayatTranslation.setText(ayat.translation);
 
         if (prayerHeader != null) {
-            prayerHeader.setText("WAKTU SOLAT  •  " + PrayerTimes.getHijriDate().toUpperCase(Locale.ROOT));
+            prayerHeader.setText("SOLAT SETERUSNYA");
         }
 
         PrayerTimes.PrayerItem[] items = PrayerTimes.getPrayerItems(this);

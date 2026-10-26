@@ -1,0 +1,39 @@
+name: Build APK
+
+# Builds the launcher on GitHub and publishes app-release.apk as a release you can download straight
+# onto a phone or TV. Run it from the Actions tab (Run workflow), or it runs on every push to main.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platforms;android-34 build-tools;34.0.0
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build release APK
+        working-directory: launcher
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleRelease
+      - name: Publish as release epl-build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          apk=launcher/app/build/outputs/apk/release/app-release.apk
+          ls -l "$apk"
+          gh release delete epl-build --yes --cleanup-tag || true
+          gh release create epl-build "$apk" --title "Glass TV with Premier League" \
+            --notes "Built from commit ${GITHUB_SHA}. Download app-release.apk and install it with adb."
